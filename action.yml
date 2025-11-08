@@ -1,0 +1,55 @@
+name: 'Jira Assign Version Action'
+description: 'Assigns a Jira version (by name or id) to one or more issues.'
+author: 'Bruno Ferreira'
+
+inputs:
+  jira-base-url:
+    description: 'Base URL of your Jira instance (e.g., https://company.atlassian.net)'
+    required: true
+  jira-user:
+    description: 'Jira username or email'
+    required: true
+  jira-token:
+    description: 'Jira API token'
+    required: true
+  issues:
+    description: 'Comma-separated list or JSON array of issue keys'
+    required: false
+  issues-file:
+    description: 'Path to a file containing issue keys or objects'
+    required: false
+  version:
+    description: 'Version name or ID to assign'
+    required: true
+  version-is-id:
+    description: "If true, treats 'version' input as an ID instead of a name"
+    required: false
+    default: 'false'
+  mode:
+    description: "Whether to assign to 'fixVersions' or 'affectedVersions'"
+    required: false
+    default: 'fix'
+  dry-run:
+    description: 'If true, simulates the assignment without making changes'
+    required: false
+    default: 'false'
+  concurrency:
+    description: 'Number of concurrent requests to Jira (default 4)'
+    required: false
+    default: '4'
+  max-retries:
+    description: 'Max number of retry attempts for transient errors/429 (default 4)'
+    required: false
+    default: '4'
+
+outputs:
+  updated-issues:
+    description: 'Comma-separated list of updated issues'
+  failed-issues:
+    description: 'JSON array with failed issues and reasons'
+  skipped-issues:
+    description: 'Comma-separated list of issues that already had the version'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
